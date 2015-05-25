@@ -1,3 +1,4 @@
 #!/bin/bash
 
-sudo apt-get install postgresql
+sudo apt-get update -y
+sudo apt-get -y install postgresql postgresql-contrib
