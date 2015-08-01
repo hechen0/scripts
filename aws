@@ -1,9 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 S="ubuntu@54.187.78.39"
 
 function server {
     ssh -t $S "$1"
+}
+
+# fix random string function return some value
+random-string(){
+    cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
 }
 
 if [ $# -eq 0 ]
@@ -20,12 +25,10 @@ case "$1" in
         server "sudo apt-get update"
         ;;
     dl)
-        server "rm /home/ubuntu/a.mp4 && youtube-dl $2 -o /home/ubuntu/a.mp4"
-        scp $S:/home/ubuntu/a.mp4 ~/Downloads/a.mp4
-        open ~/Downloads/a.mp4
-        ;;
-    log)
-        server "tail -f /var/log/shadowsocks.log"
+        server "youtube-dl $2 -o /home/ubuntu/a.mp4"
+        NEW_NAME=$(cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+        scp $S:/home/ubuntu/a.mp4 ~/Downloads/$NEW_NAME.mp4
+        open ~/Downloads/$NEW_NAME.mp4
         ;;
     *)
         echo "not support option '$1' yet"
