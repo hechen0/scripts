@@ -1,14 +1,9 @@
 #!/bin/bash
 
-S="ubuntu@54.187.78.39"
+S="ubuntu@52.68.27.10"
 
 function server {
     ssh -t $S "$1"
-}
-
-# fix random string function return some value
-random-string(){
-    cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
 }
 
 if [ $# -eq 0 ]
@@ -18,6 +13,10 @@ then
 fi
 
 case "$1" in
+
+         exec)
+        server $2
+        ;;
     install)
         server "sudo apt-get install $2"
         ;;
@@ -30,6 +29,10 @@ case "$1" in
         scp $S:/home/ubuntu/a.mp4 ~/Downloads/$NEW_NAME.mp4
         open ~/Downloads/$NEW_NAME.mp4
         ;;
+    log)
+        server "tail -f /var/log/shadowsocks.log"
+        ;;
     *)
         echo "not support option '$1' yet"
+        ;;
 esac
