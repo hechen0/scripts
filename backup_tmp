@@ -1,0 +1,11 @@
+#!/bin/bash
+
+upyun_operator=`cat upyun_operator`
+upyun_password=`cat upyun_password`
+upyun_host='http://v0.api.upyun.com'
+upyun_bucket='backupfile'
+
+authorization=echo -n
+curl -X GET \
+ $upyun_host/$upyun_bucket \
+ -H "Authorization: Basic "
