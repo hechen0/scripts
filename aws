@@ -24,10 +24,13 @@ case "$1" in
         server "sudo apt-get update"
         ;;
     dl)
-        server "youtube-dl $2 -o /home/ubuntu/a.mp4"
+        server "rm /home/ubuntu/a.mp4 || true && youtube-dl $2 -o /home/ubuntu/a.mp4"
         NEW_NAME=$(cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
         scp $S:/home/ubuntu/a.mp4 ~/Downloads/$NEW_NAME.mp4
         open ~/Downloads/$NEW_NAME.mp4
+        ;;
+    get)
+        scp $S:$2 ~/Downloads
         ;;
     log)
         server "tail -f /var/log/shadowsocks.log"
